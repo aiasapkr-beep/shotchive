@@ -1,0 +1,90 @@
+name: Screenshots
+options:
+  bundleIdPrefix: com.kimminsu
+  deploymentTarget:
+    iOS: "26.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: HSGY74FQXS
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Screenshots:
+    type: application
+    platform: iOS
+    sources:
+      - Screenshots
+      - Shared
+    info:
+      path: Screenshots/Info.plist
+      properties:
+        CFBundleDisplayName: Shotchive
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSApplicationCategoryType: public.app-category.productivity
+        NSPhotoLibraryUsageDescription: 방금 저장된 스크린샷을 찾아 메모와 함께 보관하기 위해 사진 접근이 필요합니다.
+        UIAppFonts:
+          - SUIT-Variable.ttf
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.kimminsu.screenshotsmemo
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        CODE_SIGN_ENTITLEMENTS: Screenshots/Screenshots.entitlements
+    dependencies:
+      - target: ScreenshotsShare
+        embed: true
+  ScreenshotsShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - ShareExtension
+      - Shared
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Shotchive
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UIAppFonts:
+          - SUIT-Variable.ttf
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsImageWithMaxCount: 1
+    settings:
+      base:
+        TARGETED_DEVICE_FAMILY: "1"
+        PRODUCT_BUNDLE_IDENTIFIER: com.kimminsu.screenshotsmemo.share
+        APPLICATION_EXTENSION_API_ONLY: YES
+        CODE_SIGN_ENTITLEMENTS: ShareExtension/Share.entitlements
+  ScreenshotsTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: Tests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: Screenshots
+schemes:
+  Screenshots:
+    build:
+      targets:
+        Screenshots: all
+    test:
+      targets:
+        - ScreenshotsTests
