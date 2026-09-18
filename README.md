@@ -106,5 +106,7 @@ SUIT는 SIL Open Font License 1.1로 배포되며 상업용 앱에 포함할 수
 
 MIT. 자세한 내용은 [LICENSE](LICENSE).
 
-SUIT Variable 서체만 예외로 SIL Open Font License 1.1 을 따릅니다 —
-[폰트 라이선스 기록](docs/FONT-LICENSE.md) 참고.
+단, 이 저장소에 포함된 SUIT Variable 서체(`Shared/Fonts/SUIT-Variable.ttf`)는
+MIT 가 아니라 **SIL Open Font License 1.1** 을 따릅니다. 라이선스 원문은
+[`Shared/Fonts/SUIT-LICENSE.txt`](Shared/Fonts/SUIT-LICENSE.txt), 포함 경위와 조건은
+[폰트 라이선스 기록](docs/FONT-LICENSE.md) 을 보세요.
