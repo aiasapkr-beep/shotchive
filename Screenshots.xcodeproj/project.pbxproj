@@ -241,15 +241,12 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					01F8EE9F99909DC0470DBBED = {
-						DevelopmentTeam = HSGY74FQXS;
 						ProvisioningStyle = Automatic;
 					};
 					301BB87E5F44555E9C1E23A7 = {
-						DevelopmentTeam = HSGY74FQXS;
 						ProvisioningStyle = Automatic;
 					};
 					748A93A670211B5B07544B83 = {
-						DevelopmentTeam = HSGY74FQXS;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -425,7 +422,6 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = HSGY74FQXS;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -493,7 +489,6 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = HSGY74FQXS;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

@@ -157,7 +157,7 @@ but the range of supported deployment target versions is 12.0 to 26.5.99.
    ```sh
    xcodebuild -project Screenshots.xcodeproj -scheme Screenshots \
      -destination 'generic/platform=iOS' -derivedDataPath build-device \
-     -allowProvisioningUpdates DEVELOPMENT_TEAM=HSGY74FQXS build 2>&1 | grep -E "error:|warning:|BUILD"
+     -allowProvisioningUpdates DEVELOPMENT_TEAM=본인_TEAM_ID build 2>&1 | grep -E "error:|warning:|BUILD"
    ```
 5. 번들 확인: `MinimumOSVersion` 이 `27.0` 인지
    ```sh

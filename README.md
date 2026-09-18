@@ -29,7 +29,7 @@ Apple은 iOS 26 이상 단축어에 스크린샷이 저장될 때 실행되는 �
 
 | 바꿀 것 | 현재 값 | 위치 |
 |---|---|---|
-| Team ID | `HSGY74FQXS` | 빌드 시 `DEVELOPMENT_TEAM=` |
+| Team ID | *(비어 있음)* | 빌드 시 `DEVELOPMENT_TEAM=본인_TEAM_ID`, 또는 Xcode의 Signing & Capabilities |
 | Bundle ID | `com.kimminsu.screenshotsmemo` | `project.yml` (앱·공유 확장 2곳) |
 | App Group | `group.com.kimminsu.screenshotsmemo` | 두 entitlement 파일 + `CaptureStore.appGroupIdentifier` |
 
@@ -59,7 +59,15 @@ xcrun simctl addmedia booted /tmp/screenshots-test.png
 
 실물 iPhone의 물리 버튼으로 찍은 스크린샷은 사진 보관함에 자동 저장되므로 이 추가 단계가 필요 없습니다.
 
-실기기 개발 빌드는 Apple Developer Team `HSGY74FQXS`, Bundle ID `com.kimminsu.screenshotsmemo`, App Group `group.com.kimminsu.screenshotsmemo`로 맞춰져 있습니다. 다른 계정으로 서명할 때는 두 타깃의 Bundle ID와 두 entitlement 파일, `CaptureStore.appGroupIdentifier`를 함께 변경하세요.
+실기기 빌드에는 본인의 Apple Developer Team ID가 필요합니다. 저장소에는 팀 ID가 들어 있지 않으니 빌드할 때 직접 넘기세요.
+
+```sh
+xcodebuild -project Screenshots.xcodeproj -scheme Screenshots \
+  -destination 'generic/platform=iOS' -derivedDataPath build-device \
+  -allowProvisioningUpdates DEVELOPMENT_TEAM=본인_TEAM_ID build
+```
+
+Team ID는 [developer.apple.com](https://developer.apple.com/account) → Membership 에서 확인하거나, Xcode 에서 프로젝트를 열고 Signing & Capabilities 탭에서 팀을 고르면 됩니다. Bundle ID 와 App Group 도 위 표대로 본인 값으로 바꿔야 합니다.
 
 프로젝트 설정을 바꿀 때는 `project.yml`을 수정하고 `xcodegen generate`를 실행합니다. 생성된 xcodeproj도 포함되어 있어 열기만 할 때 XcodeGen 설치는 필요 없습니다.
 
