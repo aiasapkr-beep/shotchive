@@ -2,13 +2,21 @@
 
 스크린샷에 ‘왜 저장했는지’를 함께 남기는 iPhone 네이티브 앱입니다.
 
-<img src="docs/demo/app-demo.gif" width="300" alt="온보딩부터 보관함, 상세 화면까지의 앱 데모">
+<img src="docs/demo/core-demo.gif" width="280" alt="스크린샷을 찍으면 이유를 묻고, 적은 이유와 함께 보관함에 저장된다">
 
-*온보딩 → 사진 접근 허용 → 설정 안내 영상 → 월별 보관함 → 상세 화면.
-더 선명한 영상은 [`docs/demo/app-demo.mp4`](docs/demo/app-demo.mp4).*
+**평소처럼 스크린샷을 찍으면 곧바로 “왜 저장했나요?”가 뜹니다.** 한 줄 적으면 그 이유가
+스크린샷과 함께 보관함에 남고, 나중에 그 이유로 찾습니다. iOS 27 실기기 녹화이며
+누르는 지점에 표시를 덧그렸습니다. 원본은 [`docs/demo/core-demo.mp4`](docs/demo/core-demo.mp4).
 
-> 캡처 직후 “왜 저장했나요?” 입력창이 뜨는 핵심 흐름은 단축어 자동화가 필요해
-> 실기기에서만 동작합니다. 위 데모는 시뮬레이터 녹화라 그 순간은 담겨 있지 않습니다.
+<details>
+<summary><b>앱 둘러보기</b> — 온보딩, 월별 보관함, 상세 화면</summary>
+
+<img src="docs/demo/app-demo.gif" width="280" alt="온보딩부터 보관함, 상세 화면까지">
+
+온보딩 → 사진 접근 허용 → 설정 안내 영상 → 월별 보관함 → 상세 화면.
+시뮬레이터 녹화입니다. 원본은 [`docs/demo/app-demo.mp4`](docs/demo/app-demo.mp4).
+
+</details>
 
 ## 현재 구현
 
