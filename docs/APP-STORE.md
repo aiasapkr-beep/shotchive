@@ -1,5 +1,9 @@
 # App Store 제출 자료 (초안)
 
+> **상태: 제출 보류.** 현재는 오픈소스 공개까지만 진행했습니다.
+> App Store 제출에는 Apple Developer Program($99/년) 가입이 필요한데, 아직 가입하지 않았습니다.
+> 이 문서는 제출을 결정했을 때 바로 쓰도록 준비해 둔 자료입니다.
+
 App Store Connect에 그대로 붙여넣기 위한 문구 모음입니다. 사실관계는 `docs/VALIDATION.md`의 실기기 검증 결과에 맞췄습니다.
 
 ---
@@ -113,6 +117,7 @@ Shotchive는 캡처한 바로 그 순간에 이유 한 줄을 남겨둡니다.
 
 ## 3. 제출 전 체크리스트
 
+- [ ] **Apple Developer Program 가입($99/년)** — 미가입. 현재 무료 개인 팀(프로파일 7일 만료)
 - [x] `PrivacyInfo.xcprivacy` — 앱·공유 확장 both, 추적 없음/수집 없음
 - [ ] **Deployment target `iOS 27.0`** — Xcode 업데이트 필요 (아래 4번). 현재 26.0
 - [x] iPhone 전용, 세로 고정

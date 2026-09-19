@@ -77,6 +77,8 @@ xcodebuild -project Screenshots.xcodeproj -scheme Screenshots \
 
 Team ID는 [developer.apple.com](https://developer.apple.com/account) → Membership 에서 확인하거나, Xcode 에서 프로젝트를 열고 Signing & Capabilities 탭에서 팀을 고르면 됩니다. Bundle ID 와 App Group 도 위 표대로 본인 값으로 바꿔야 합니다.
 
+**무료 Apple 계정으로도 자기 기기에 설치할 수 있습니다.** 다만 프로비저닝 프로파일이 **7일**만 유효해서, 만료되면 앱이 실행되지 않습니다. 다시 빌드해 설치하면 7일이 갱신됩니다. 유료 Apple Developer Program($99/년)에 가입하면 1년짜리가 발급됩니다. 시뮬레이터만 쓸 거라면 이 제약이 없습니다.
+
 프로젝트 설정을 바꿀 때는 `project.yml`을 수정하고 `xcodegen generate`를 실행합니다. 생성된 xcodeproj도 포함되어 있어 열기만 할 때 XcodeGen 설치는 필요 없습니다.
 
 ## iOS 26 이상(27 포함): 기존 캡처 버튼과 연결
