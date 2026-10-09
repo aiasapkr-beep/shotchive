@@ -41,13 +41,22 @@ final class CaptureStore {
 
         if let directory {
             root = directory
-        } else {
-            guard let group = fileManager.containerURL(
-                forSecurityApplicationGroupIdentifier: Self.appGroupIdentifier
-            ) else {
-                throw StoreError.appGroupUnavailable(Self.appGroupIdentifier)
-            }
+        } else if let group = fileManager.containerURL(
+            forSecurityApplicationGroupIdentifier: Self.appGroupIdentifier
+        ) {
             root = group.appendingPathComponent("Captures", isDirectory: true)
+        } else {
+            // App Group 을 쓸 수 없는 빌드(무료 개인 팀 서명 등)에서는 앱 자체 컨테이너에 보관한다.
+            // 이때는 공유 확장과 저장소를 공유하지 못하므로 공유 시트 경로를 쓸 수 없다.
+            // App Group 이 가능한 빌드로 되돌리면 저장 위치가 달라져 기존 항목이 보이지 않으니,
+            // 그 경우 이 경로의 Captures 폴더를 App Group 컨테이너로 옮겨야 한다.
+            let support = try fileManager.url(
+                for: .applicationSupportDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: true
+            )
+            root = support.appendingPathComponent("Captures", isDirectory: true)
         }
 
         self.fileManager = fileManager

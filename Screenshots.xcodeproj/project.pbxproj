@@ -8,37 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		08E0AC1EBE01594DAF68F9C2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B195E696AFAC5695445DBA77 /* PrivacyInfo.xcprivacy */; };
-		2590DF0E852E291BC3A8EC17 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2571CE0E09B105898906789 /* ShareViewController.swift */; };
-		2F9A61B7EE780E85B5E4C64A /* CaptureExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7163BC8C7AB7FE94A2C60F /* CaptureExporter.swift */; };
-		35733E1E4B4F409CB084B044 /* ScreenshotsShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7AE7A9C7D6A4C384593C7F57 /* ScreenshotsShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		419437BB2409D3644732C6E2 /* SUITTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133679E7CE9D24D3CF557B2E /* SUITTypography.swift */; };
 		4C54F27A79BC3D26C7E961DA /* SUITTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133679E7CE9D24D3CF557B2E /* SUITTypography.swift */; };
-		527153A54A09BE9615C9CDE2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0F29378060C4B485B674487B /* PrivacyInfo.xcprivacy */; };
 		632A888AFB54527EC2A43DB3 /* ScreenshotsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC6D940EC86FC10789AF146 /* ScreenshotsApp.swift */; };
 		653DDCA3A6446EE82BF69D74 /* SaveScreenshotIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79444418F96001490F0CAFC1 /* SaveScreenshotIntent.swift */; };
 		6DB3BA0CA1365792D47E2B58 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEDECDCDA8341C5381E1985 /* LibraryView.swift */; };
 		7080A210D9C0E8EC19CB89B6 /* automation-demo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 760C9072B14CE68EAD602F4D /* automation-demo.mp4 */; };
 		888D5D0FA1B3EA7465F90437 /* CaptureStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AC5167B6DF8F59F239BF6D /* CaptureStoreTests.swift */; };
-		917A39282481DF9001F79543 /* SUIT-LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 71840789BE9E503199544994 /* SUIT-LICENSE.txt */; };
 		9C0B91EE5A7E22534AF1EFA5 /* CaptureExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7163BC8C7AB7FE94A2C60F /* CaptureExporter.swift */; };
 		B15F2F8E554097440B8F230A /* SUIT-LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 71840789BE9E503199544994 /* SUIT-LICENSE.txt */; };
-		B524D776112E1ED8D17CCAF2 /* Theme.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C1AE2837C8C237B6FB1D45 /* Theme.xcassets */; };
-		BBD59C62BE64840D69753793 /* CaptureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FC7328D2542AC774DA765F /* CaptureStore.swift */; };
 		D06E5D0ED1B0929568CECDED /* Theme.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C1AE2837C8C237B6FB1D45 /* Theme.xcassets */; };
 		D12A77A19E5A76600636B879 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BAE8A7CFB3FF0D582A5C27DE /* Assets.xcassets */; };
-		EC9F573BDC61E315004E244F /* SUIT-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FDE75464C2E033C1D59BF61 /* SUIT-Variable.ttf */; };
 		F99B1A98A738C32019A42209 /* CaptureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FC7328D2542AC774DA765F /* CaptureStore.swift */; };
 		FC5148C3C7C7DD9F50488F57 /* SUIT-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FDE75464C2E033C1D59BF61 /* SUIT-Variable.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		69153EA476A1F33ED693A046 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5E72A91D147DFA122167D60C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 301BB87E5F44555E9C1E23A7;
-			remoteInfo = ScreenshotsShare;
-		};
 		B6A5B35CEB23637EC61B7134 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E72A91D147DFA122167D60C /* Project object */;
@@ -48,43 +32,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		5A70F909F195430B6CACE3C0 /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				35733E1E4B4F409CB084B044 /* ScreenshotsShare.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		0F29378060C4B485B674487B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		133679E7CE9D24D3CF557B2E /* SUITTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUITTypography.swift; sourceTree = "<group>"; };
 		2FDE75464C2E033C1D59BF61 /* SUIT-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SUIT-Variable.ttf"; sourceTree = "<group>"; };
 		392C055A14CF0BD9B6D59697 /* Screenshots.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Screenshots.entitlements; sourceTree = "<group>"; };
-		527A31B28F8B1197EF72AF97 /* Share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Share.entitlements; sourceTree = "<group>"; };
 		5FEDECDCDA8341C5381E1985 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		71840789BE9E503199544994 /* SUIT-LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SUIT-LICENSE.txt"; sourceTree = "<group>"; };
 		760C9072B14CE68EAD602F4D /* automation-demo.mp4 */ = {isa = PBXFileReference; path = "automation-demo.mp4"; sourceTree = "<group>"; };
 		791807558E614EF8F1DE86C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		79444418F96001490F0CAFC1 /* SaveScreenshotIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveScreenshotIntent.swift; sourceTree = "<group>"; };
-		7AE7A9C7D6A4C384593C7F57 /* ScreenshotsShare.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ScreenshotsShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AC5167B6DF8F59F239BF6D /* CaptureStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureStoreTests.swift; sourceTree = "<group>"; };
 		A5C1AE2837C8C237B6FB1D45 /* Theme.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Theme.xcassets; sourceTree = "<group>"; };
 		AF7163BC8C7AB7FE94A2C60F /* CaptureExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureExporter.swift; sourceTree = "<group>"; };
 		B195E696AFAC5695445DBA77 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BAE8A7CFB3FF0D582A5C27DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DCC6D940EC86FC10789AF146 /* ScreenshotsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotsApp.swift; sourceTree = "<group>"; };
-		DDD6A8769A299BD0236CECB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DE18DDB11AEB3F0AB9065CBB /* ScreenshotsTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ScreenshotsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE8B0AA25A9834FE0C1773CD /* Screenshots.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Screenshots.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4FC7328D2542AC774DA765F /* CaptureStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureStore.swift; sourceTree = "<group>"; };
-		F2571CE0E09B105898906789 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -101,7 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				DE8B0AA25A9834FE0C1773CD /* Screenshots.app */,
-				7AE7A9C7D6A4C384593C7F57 /* ScreenshotsShare.appex */,
 				DE18DDB11AEB3F0AB9065CBB /* ScreenshotsTests.xctest */,
 			);
 			name = Products;
@@ -143,21 +107,9 @@
 			children = (
 				A8E65DEBC7238ECDF325527B /* Screenshots */,
 				F3CE755F1C252D283A7D7E17 /* Shared */,
-				F1BFA2FB64D9D241E8E340E7 /* ShareExtension */,
 				88A7BFD5F0C63975D8A21BCC /* Tests */,
 				72E61942158261C5477CCF11 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		F1BFA2FB64D9D241E8E340E7 /* ShareExtension */ = {
-			isa = PBXGroup;
-			children = (
-				DDD6A8769A299BD0236CECB3 /* Info.plist */,
-				0F29378060C4B485B674487B /* PrivacyInfo.xcprivacy */,
-				527A31B28F8B1197EF72AF97 /* Share.entitlements */,
-				F2571CE0E09B105898906789 /* ShareViewController.swift */,
-			);
-			path = ShareExtension;
 			sourceTree = "<group>";
 		};
 		F3CE755F1C252D283A7D7E17 /* Shared */ = {
@@ -193,36 +145,16 @@
 			productReference = DE18DDB11AEB3F0AB9065CBB /* ScreenshotsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		301BB87E5F44555E9C1E23A7 /* ScreenshotsShare */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 5BC350D612D061FA76063DF7 /* Build configuration list for PBXNativeTarget "ScreenshotsShare" */;
-			buildPhases = (
-				037DCE0530B9B43E505F623F /* Sources */,
-				F3E4BB07E3E4C2F5B9B63FC8 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ScreenshotsShare;
-			packageProductDependencies = (
-			);
-			productName = ScreenshotsShare;
-			productReference = 7AE7A9C7D6A4C384593C7F57 /* ScreenshotsShare.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		748A93A670211B5B07544B83 /* Screenshots */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B10586B20A534EB5A1B88680 /* Build configuration list for PBXNativeTarget "Screenshots" */;
 			buildPhases = (
 				1BA14C9A2C313A312536D51E /* Sources */,
 				8171DD3B5881FE961744C8B1 /* Resources */,
-				5A70F909F195430B6CACE3C0 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				DA01F3775994A8A8DEC8F4A4 /* PBXTargetDependency */,
 			);
 			name = Screenshots;
 			packageProductDependencies = (
@@ -241,9 +173,6 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					01F8EE9F99909DC0470DBBED = {
-						ProvisioningStyle = Automatic;
-					};
-					301BB87E5F44555E9C1E23A7 = {
 						ProvisioningStyle = Automatic;
 					};
 					748A93A670211B5B07544B83 = {
@@ -266,7 +195,6 @@
 			projectRoot = "";
 			targets = (
 				748A93A670211B5B07544B83 /* Screenshots */,
-				301BB87E5F44555E9C1E23A7 /* ScreenshotsShare */,
 				01F8EE9F99909DC0470DBBED /* ScreenshotsTests */,
 			);
 		};
@@ -286,31 +214,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F3E4BB07E3E4C2F5B9B63FC8 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				527153A54A09BE9615C9CDE2 /* PrivacyInfo.xcprivacy in Resources */,
-				917A39282481DF9001F79543 /* SUIT-LICENSE.txt in Resources */,
-				EC9F573BDC61E315004E244F /* SUIT-Variable.ttf in Resources */,
-				B524D776112E1ED8D17CCAF2 /* Theme.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		037DCE0530B9B43E505F623F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2F9A61B7EE780E85B5E4C64A /* CaptureExporter.swift in Sources */,
-				BBD59C62BE64840D69753793 /* CaptureStore.swift in Sources */,
-				419437BB2409D3644732C6E2 /* SUITTypography.swift in Sources */,
-				2590DF0E852E291BC3A8EC17 /* ShareViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		08230CA4F111F0B449D92B1F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -340,11 +246,6 @@
 			target = 748A93A670211B5B07544B83 /* Screenshots */;
 			targetProxy = B6A5B35CEB23637EC61B7134 /* PBXContainerItemProxy */;
 		};
-		DA01F3775994A8A8DEC8F4A4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 301BB87E5F44555E9C1E23A7 /* ScreenshotsShare */;
-			targetProxy = 69153EA476A1F33ED693A046 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -369,7 +270,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Screenshots/Screenshots.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Screenshots/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
@@ -516,7 +416,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Screenshots/Screenshots.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Screenshots/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
@@ -527,23 +426,6 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kimminsu.screenshotsmemo;
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		7D28BF817060B4293A1F062B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = ShareExtension/Share.entitlements;
-				INFOPLIST_FILE = ShareExtension/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kimminsu.screenshotsmemo.share;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -566,23 +448,6 @@
 			};
 			name = Debug;
 		};
-		C3891904E23B26DDECE2BAC0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = ShareExtension/Share.entitlements;
-				INFOPLIST_FILE = ShareExtension/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kimminsu.screenshotsmemo.share;
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -591,15 +456,6 @@
 			buildConfigurations = (
 				25E8409A1F187FD86898EA93 /* Debug */,
 				5479CE45F0A085CC3F141234 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		5BC350D612D061FA76063DF7 /* Build configuration list for PBXNativeTarget "ScreenshotsShare" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7D28BF817060B4293A1F062B /* Debug */,
-				C3891904E23B26DDECE2BAC0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

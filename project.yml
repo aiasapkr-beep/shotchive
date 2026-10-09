@@ -40,36 +40,6 @@ targets:
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
-        CODE_SIGN_ENTITLEMENTS: Screenshots/Screenshots.entitlements
-    dependencies:
-      - target: ScreenshotsShare
-        embed: true
-  ScreenshotsShare:
-    type: app-extension
-    platform: iOS
-    sources:
-      - ShareExtension
-      - Shared
-    info:
-      path: ShareExtension/Info.plist
-      properties:
-        CFBundleDisplayName: Shotchive
-        CFBundleShortVersionString: $(MARKETING_VERSION)
-        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-        UIAppFonts:
-          - SUIT-Variable.ttf
-        NSExtension:
-          NSExtensionPointIdentifier: com.apple.share-services
-          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
-          NSExtensionAttributes:
-            NSExtensionActivationRule:
-              NSExtensionActivationSupportsImageWithMaxCount: 1
-    settings:
-      base:
-        TARGETED_DEVICE_FAMILY: "1"
-        PRODUCT_BUNDLE_IDENTIFIER: com.kimminsu.screenshotsmemo.share
-        APPLICATION_EXTENSION_API_ONLY: YES
-        CODE_SIGN_ENTITLEMENTS: ShareExtension/Share.entitlements
   ScreenshotsTests:
     type: bundle.unit-test
     platform: iOS
