@@ -38,24 +38,23 @@ struct SaveLatestScreenshotIntent: AppIntent {
             throw LatestScreenshotError.photoAccessRequired
         }
 
+        // 이유를 먼저 묻는다. 사진 보관함 색인이 늦는 앱(인스타그램 등)에서 캡처를 찾느라
+        // 시간이 걸려도 입력창은 즉시 떠야 한다. 찾기를 먼저 하면 실패했을 때
+        // 입력창조차 뜨지 않아 사용자는 아무 반응도 보지 못한다.
+        var text = Self.cleaned(note)
+        if text == nil,
+           let answered = try? await $note.requestValue(IntentDialog("왜 저장했나요?")) {
+            text = Self.cleaned(answered)
+        }
+
         let asset = try await Self.findRecentScreenshot()
         let imageData = try await Self.imageData(for: asset)
         let store = try CaptureStore()
+        _ = try store.save(imageData: imageData, note: text ?? "")
 
-        // 이유를 묻기 전에 먼저 저장한다. 입력을 취소하거나 놓쳐도 캡처 자체는 남아야 한다.
-        let capture = try store.save(imageData: imageData, note: Self.cleaned(note) ?? "")
-
-        if Self.cleaned(note) != nil {
-            return .result(dialog: "방금 스크린샷과 이유를 저장했어요.")
-        }
-
-        if let answered = try? await $note.requestValue(IntentDialog("왜 저장했나요?")),
-           let text = Self.cleaned(answered) {
-            try? store.update(capture, note: text)
-            return .result(dialog: "방금 스크린샷과 이유를 저장했어요.")
-        }
-
-        return .result(dialog: "메모 없이 저장했어요. 앱에서 나중에 적을 수 있어요.")
+        return .result(dialog: text == nil
+            ? "메모 없이 저장했어요. 앱에서 나중에 적을 수 있어요."
+            : "방금 스크린샷과 이유를 저장했어요.")
     }
 
     private static func cleaned(_ value: String?) -> String? {
@@ -67,8 +66,10 @@ struct SaveLatestScreenshotIntent: AppIntent {
     private static func findRecentScreenshot() async throws -> PHAsset {
         // The screenshot automation can fire before Photos finishes indexing the new asset.
         // Wait briefly instead of immediately pairing the note with an older screenshot.
-        for attempt in 0..<6 {
-            try await Task.sleep(nanoseconds: attempt == 0 ? 250_000_000 : 500_000_000)
+        // 무거운 앱에서 캡처한 직후에는 사진 앱이 색인하는 데 몇 초가 걸린다.
+        // 짧게 포기하면 캡처를 놓치므로 약 10초까지 기다린다.
+        for attempt in 0..<14 {
+            try await Task.sleep(nanoseconds: attempt == 0 ? 250_000_000 : 750_000_000)
 
             if let screenshot = fetchNewestScreenshot(), isRecent(screenshot) {
                 return screenshot
