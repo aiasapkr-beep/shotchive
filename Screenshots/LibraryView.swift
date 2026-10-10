@@ -11,6 +11,7 @@ struct LibraryView: View {
     @State private var searchText = ""
     @State private var filter: LibraryFilter = .all
     @State private var showingComposer = false
+    @State private var showingMissed = false
     @State private var showingHelp = false
     @State private var exportArchive: ExportArchive?
     @State private var isExporting = false
@@ -48,9 +49,22 @@ struct LibraryView: View {
         NavigationStack {
             Group {
                 if model.captures.isEmpty {
-                    EmptyLibraryView(addAction: { showingComposer = true }, helpAction: { showingHelp = true })
+                    EmptyLibraryView(
+                        addAction: { showingComposer = true },
+                        helpAction: { showingHelp = true },
+                        missedCount: model.missed.count,
+                        missedAction: { showingMissed = true }
+                    )
                 } else {
                     List {
+                        if !model.missed.isEmpty {
+                            Section {
+                                MissedCapturesBanner(count: model.missed.count) {
+                                    showingMissed = true
+                                }
+                            }
+                        }
+
                         Section {
                             if dynamicTypeSize.isAccessibilitySize {
                                 Picker("보기", selection: $filter) {
@@ -134,6 +148,9 @@ struct LibraryView: View {
             }
             .sheet(isPresented: $showingComposer) {
                 CaptureComposer()
+            }
+            .sheet(isPresented: $showingMissed) {
+                MissedCapturesView()
             }
             .sheet(isPresented: $showingHelp) {
                 HelpView(automationSetupAcknowledged: $automationSetupAcknowledged)
@@ -707,6 +724,8 @@ private struct LocalCaptureImage: View {
 private struct EmptyLibraryView: View {
     let addAction: () -> Void
     let helpAction: () -> Void
+    var missedCount: Int = 0
+    var missedAction: () -> Void = {}
 
     var body: some View {
         VStack(spacing: 16) {
@@ -721,8 +740,18 @@ private struct EmptyLibraryView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 28)
             VStack(spacing: 12) {
-                Button("첫 스크린샷 추가", action: addAction)
-                    .buttonStyle(.borderedProminent)
+                // 자동화를 연결해 뒀는데 한 번도 안 돈 경우가 있다. 그때 보관함은
+                // 비어 있지만 스크린샷은 사진 보관함에 그대로 있으므로, 빈 화면에서도
+                // 되찾을 길을 먼저 보여 준다.
+                if missedCount > 0 {
+                    Button("최근 스크린샷 \(missedCount)장 가져오기", action: missedAction)
+                        .buttonStyle(.borderedProminent)
+                    Button("직접 추가", action: addAction)
+                        .font(.suitSubheadline)
+                } else {
+                    Button("첫 스크린샷 추가", action: addAction)
+                        .buttonStyle(.borderedProminent)
+                }
                 Button("빠르게 저장하는 방법", action: helpAction)
                     .font(.suitSubheadline)
             }
@@ -1136,6 +1165,23 @@ private struct HelpView: View {
                 }
 
                 Section {
+                    HelpStep(
+                        icon: "clock.arrow.circlepath",
+                        title: "놓친 캡처 되찾기",
+                        detail: "자동화는 iOS가 간헐적으로 건너뜁니다. 저전력 모드이거나 기기가 바쁠 때 그렇습니다. 그래도 스크린샷 자체는 사진 보관함에 남아 있으니, 보관함 맨 위에 ‘메모 없이 지나간 스크린샷’이 보이면 눌러서 이유를 적어 넣으면 됩니다."
+                    )
+                    HelpStep(
+                        icon: "photo.badge.exclamationmark",
+                        title: "사진 접근이 ‘제한됨’이면 동작하지 않아요",
+                        detail: "방금 찍은 스크린샷은 미리 선택해 둘 수 없어서, 제한된 접근으로는 찾을 수 없습니다. 설정 > 앱 > Shotchive > 사진에서 ‘전체 접근 허용’을 선택하세요."
+                    )
+                } header: {
+                    Text("입력창이 안 뜰 때")
+                } footer: {
+                    Text("캡처가 보관함에 아예 없으면 자동화가 실행되지 않은 것이고, 캡처는 있는데 메모만 비어 있으면 입력창만 뜨지 못한 것입니다. 어느 쪽이든 위 방법으로 되찾을 수 있어요.")
+                }
+
+                Section {
                     HelpStep(icon: "rectangle.and.pencil.and.ellipsis", title: "스크린샷 공유", detail: "캡처 미리보기의 공유 버튼에서 ‘Shotchive’를 선택하고 이유를 적어 저장하세요.")
                 } header: {
                     Text("공유 시트로 저장")
@@ -1170,5 +1216,228 @@ private struct HelpStep: View {
             }
         }
         .padding(.vertical, 5)
+    }
+}
+
+// MARK: - 자동화가 건너뛴 캡처
+
+/// 보관함 맨 위에 붙는 한 줄. 세어 보여 주기만 하고 판단은 사용자에게 맡긴다.
+private struct MissedCapturesBanner: View {
+    let count: Int
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: "clock.arrow.circlepath")
+                    .font(.suitTitle2Semibold)
+                    .foregroundStyle(Color("AccentColor"))
+                    .frame(width: 28)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("메모 없이 지나간 스크린샷 \(count)장")
+                        .font(.suitBodySemibold)
+                    Text("캡처할 때 입력창이 뜨지 않았어요. 지금 이유를 적어 보관할 수 있어요.")
+                        .font(.suitSubheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer(minLength: 8)
+                Image(systemName: "chevron.right")
+                    .font(.suitSubheadline)
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.vertical, 4)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("library.missed")
+    }
+}
+
+/// 되찾은 스크린샷을 한 장씩 처리하는 화면. 메모를 적어 보관하거나, 넘긴다.
+private struct MissedCapturesView: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var model: LibraryModel
+    @State private var editing: MissedScreenshots.Item?
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if model.missed.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "checkmark.circle")
+                            .font(.system(size: 44, weight: .light))
+                            .foregroundStyle(Color("AccentColor"))
+                        Text("남은 게 없어요")
+                            .font(.suitTitle2Bold)
+                        Text("최근 스크린샷은 모두 보관했거나 넘겼어요.")
+                            .font(.suitSubheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(uiColor: .systemGroupedBackground))
+                } else {
+                    List {
+                        Section {
+                            ForEach(model.missed) { item in
+                                Button { editing = item } label: {
+                                    MissedRow(item: item)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        } footer: {
+                            Text("사진 보관함에 있는 최근 \(MissedScreenshots.lookbackDays)일치 스크린샷 중, 아직 Shotchive에 없는 것만 보여 줍니다.")
+                        }
+                    }
+                    .listStyle(.insetGrouped)
+                }
+            }
+            .navigationTitle("놓친 캡처")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("모두 넘기기") {
+                        model.ignoreAllMissed()
+                        dismiss()
+                    }
+                    .disabled(model.missed.isEmpty)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("완료") { dismiss() }.fontWeight(.semibold)
+                }
+            }
+            .sheet(item: $editing) { item in
+                MissedNoteEditor(item: item)
+            }
+        }
+    }
+}
+
+private struct MissedRow: View {
+    let item: MissedScreenshots.Item
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            PhotoAssetThumbnail(asset: item.asset)
+                .frame(width: 72, height: 72)
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            VStack(alignment: .leading, spacing: 5) {
+                Text("저장한 이유 없음")
+                    .font(.suitBody)
+                    .foregroundStyle(.secondary)
+                Text(item.createdAt, format: .dateTime.year().month().day().hour().minute())
+                    .font(.suitCaption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            Image(systemName: "chevron.right")
+                .font(.suitSubheadline)
+                .foregroundStyle(.tertiary)
+                .padding(.top, 2)
+        }
+        .padding(.vertical, 4)
+        .contentShape(Rectangle())
+    }
+}
+
+/// 사진 보관함 에셋의 썸네일. 보관함 항목과 달리 아직 우리 저장소에 파일이 없다.
+private struct PhotoAssetThumbnail: View {
+    let asset: PHAsset
+    /// 스크린샷은 세로로 길어서 가운데를 잘라내면 무슨 화면인지 알아볼 수 없다.
+    /// 위쪽을 보여 줘야 앱 이름과 제목이 남는다 — 보관함 썸네일과 같은 규칙이다.
+    var alignment: Alignment = .top
+    @State private var image: UIImage?
+
+    var body: some View {
+        Color(uiColor: .tertiarySystemFill)
+            .overlay(alignment: alignment) {
+                if let image {
+                    Image(uiImage: image).resizable().scaledToFill()
+                }
+            }
+            .clipped()
+        .task(id: asset.localIdentifier) {
+            let options = PHImageRequestOptions()
+            options.deliveryMode = .opportunistic
+            options.isNetworkAccessAllowed = true
+            let size = CGSize(width: 216, height: 216)
+            image = await withCheckedContinuation { continuation in
+                var resumed = false
+                PHImageManager.default().requestImage(
+                    for: asset,
+                    targetSize: size,
+                    contentMode: .aspectFill,
+                    options: options
+                ) { result, info in
+                    // opportunistic 은 저해상도를 먼저 주고 한 번 더 부른다.
+                    // continuation 은 한 번만 재개할 수 있으므로 최종본만 받는다.
+                    let degraded = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+                    guard !degraded, !resumed else { return }
+                    resumed = true
+                    continuation.resume(returning: result)
+                }
+            }
+        }
+        .accessibilityHidden(true)
+    }
+}
+
+private struct MissedNoteEditor: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var model: LibraryModel
+    let item: MissedScreenshots.Item
+    @State private var note = ""
+    @State private var saving = false
+    @FocusState private var focused: Bool
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    PhotoAssetThumbnail(asset: item.asset)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 220)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
+                }
+                Section("저장한 이유") {
+                    TextField("이 스크린샷을 왜 저장했나요?", text: $note, axis: .vertical)
+                        .lineLimit(3...10)
+                        .focused($focused)
+                        .accessibilityIdentifier("missed.note")
+                }
+                Section {
+                    Text(item.createdAt, format: .dateTime.year().month().day().hour().minute())
+                        .font(.suitSubheadline)
+                        .foregroundStyle(.secondary)
+                } header: {
+                    Text("찍은 시각")
+                }
+            }
+            .navigationTitle("놓친 캡처")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("취소") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("보관하기") {
+                        saving = true
+                        Task {
+                            // 메모를 비워 둬도 보관한다. 캡처를 잃는 것보다 낫고,
+                            // 이유는 상세 화면에서 나중에 채울 수 있다.
+                            let ok = await model.importMissed(item, note: note)
+                            saving = false
+                            if ok { dismiss() }
+                        }
+                    }
+                    .fontWeight(.semibold)
+                    .disabled(saving)
+                    .accessibilityIdentifier("missed.save")
+                }
+            }
+            .onAppear { focused = true }
+        }
     }
 }

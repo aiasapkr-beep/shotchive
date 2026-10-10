@@ -33,8 +33,15 @@ struct SaveLatestScreenshotIntent: AppIntent {
     }
 
     func perform() async throws -> some IntentResult & ProvidesDialog {
-        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-        guard status == .authorized else {
+        // 접근이 '전체 허용' 이 아니면 방금 찍은 캡처를 찾을 수 없다. 아직 존재하지도
+        // 않는 사진을 사용자가 미리 선택해 둘 수는 없기 때문이다. 묻기 전에 끝내되,
+        // 어디를 어떻게 바꿔야 하는지는 분명히 말한다.
+        switch PHPhotoLibrary.authorizationStatus(for: .readWrite) {
+        case .authorized:
+            break
+        case .limited:
+            throw LatestScreenshotError.photoAccessLimited
+        default:
             throw LatestScreenshotError.photoAccessRequired
         }
 
@@ -50,7 +57,13 @@ struct SaveLatestScreenshotIntent: AppIntent {
         let asset = try await Self.findRecentScreenshot()
         let imageData = try await Self.imageData(for: asset)
         let store = try CaptureStore()
-        _ = try store.save(imageData: imageData, note: text ?? "")
+        // 에셋 식별자를 함께 남긴다. 자동화가 건너뛴 캡처를 앱이 나중에 찾아 줄 때
+        // 이미 보관한 장을 두 번 들여오지 않기 위한 표식이다(`MissedScreenshots`).
+        _ = try store.save(
+            imageData: imageData,
+            note: text ?? "",
+            assetLocalIdentifier: asset.localIdentifier
+        )
 
         return .result(dialog: text == nil
             ? "메모 없이 저장했어요. 앱에서 나중에 적을 수 있어요."
@@ -153,6 +166,7 @@ struct ScreenshotsAppShortcuts: AppShortcutsProvider {
 
 private enum LatestScreenshotError: LocalizedError {
     case photoAccessRequired
+    case photoAccessLimited
     case screenshotNotFound
     case imageUnavailable
 
@@ -160,6 +174,8 @@ private enum LatestScreenshotError: LocalizedError {
         switch self {
         case .photoAccessRequired:
             return "Shotchive 앱에서 사진 접근을 먼저 허용해 주세요."
+        case .photoAccessLimited:
+            return "사진 접근이 '제한됨' 으로 되어 있어요. 설정 > 앱 > Shotchive > 사진에서 '전체 접근 허용'을 선택해 주세요. 방금 찍은 스크린샷은 미리 선택해 둘 수 없어서 제한된 접근으로는 찾을 수 없어요."
         case .screenshotNotFound:
             #if targetEnvironment(simulator)
             return "시뮬레이터의 사진 앱에 최근 이미지가 없어요. 시뮬레이터 캡처는 Mac에 저장되므로 사진 앱에 이미지를 먼저 추가해 주세요."
