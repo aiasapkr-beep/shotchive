@@ -2,16 +2,11 @@
 
 스크린샷에 ‘왜 저장했는지’를 함께 남기는 iPhone 네이티브 앱입니다.
 
-<video
-  src="https://github.com/aiasapkr-beep/shotchive/raw/main/docs/demo/shotchive-promo.mp4"
-  poster="docs/demo/shotchive-promo-poster.png"
-  controls muted playsinline width="280"
-  alt="쌓이기만 하는 스크린샷 더미에서 한 장이 떠오르고, 이유 한 줄이 붙어 보관된다"></video>
+<img src="docs/demo/shotchive-promo.gif" width="280" alt="쌓이기만 하는 스크린샷 더미에서 한 장이 떠오르고, 이유 한 줄이 붙어 보관된다">
 
 **평소처럼 스크린샷을 찍으면 곧바로 “왜 저장했나요?”가 뜹니다.** 한 줄 적으면 그 이유가
 스크린샷과 함께 보관함에 남고, 나중에 그 이유로 찾습니다.
-영상이 재생되지 않으면 [`docs/demo/shotchive-promo.mp4`](docs/demo/shotchive-promo.mp4)를
-직접 열어 보세요. 22초, 소리 있음.
+소리까지 있는 원본은 [`docs/demo/shotchive-promo.mp4`](docs/demo/shotchive-promo.mp4).
 
 <details>
 <summary><b>실기기 녹화</b> — 캡처부터 보관까지 한 번에</summary>
