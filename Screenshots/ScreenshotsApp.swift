@@ -41,6 +41,7 @@ struct ScreenshotsApp: App {
 @MainActor
 final class LibraryModel: ObservableObject {
     @Published private(set) var captures: [Capture] = []
+    @Published private(set) var missed: [MissedScreenshots.Item] = []
     @Published var presentedError: String?
 
     private var store: CaptureStore?
@@ -70,6 +71,49 @@ final class LibraryModel: ObservableObject {
         } catch {
             presentedError = "저장된 스크린샷을 불러오지 못했어요.\n\(error.localizedDescription)"
         }
+        rescanMissed()
+    }
+
+    // MARK: - 자동화가 건너뛴 캡처
+
+    /// 사진 보관함을 훑어 아직 보관함에 없는 최근 스크린샷을 찾는다.
+    /// `reload()` 안에서 불리므로 앱이 앞으로 올 때마다 갱신된다.
+    func rescanMissed() {
+        let ignoredBefore = UserDefaults.standard.object(
+            forKey: MissedScreenshots.ignoredBeforeKey
+        ) as? Date
+        missed = MissedScreenshots.find(captures: captures, ignoredBefore: ignoredBefore)
+    }
+
+    /// 놓친 캡처 한 장을 메모와 함께 보관함에 넣는다.
+    /// `createdAt` 은 저장 시각이 아니라 **촬영 시각**으로 둔다. 몇 시간 전에 찍은
+    /// 것을 지금 들여왔을 때 월 묶음에서 엉뚱한 자리에 끼지 않게 하려는 것이다.
+    @discardableResult
+    func importMissed(_ item: MissedScreenshots.Item, note: String) async -> Bool {
+        guard let store else {
+            presentedError = "보관함을 사용할 수 없어요."
+            return false
+        }
+        do {
+            let data = try await MissedScreenshots.imageData(for: item.asset)
+            _ = try store.save(
+                imageData: data,
+                note: note.trimmingCharacters(in: .whitespacesAndNewlines),
+                createdAt: item.createdAt,
+                assetLocalIdentifier: item.id
+            )
+            reload()
+            return true
+        } catch {
+            presentedError = "스크린샷을 가져오지 못했어요.\n\(error.localizedDescription)"
+            return false
+        }
+    }
+
+    /// 지금 보이는 것들을 모두 넘긴다. 이 시각 이전은 다시 묻지 않는다.
+    func ignoreAllMissed() {
+        UserDefaults.standard.set(Date(), forKey: MissedScreenshots.ignoredBeforeKey)
+        missed = []
     }
 
     @discardableResult

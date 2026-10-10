@@ -6,6 +6,10 @@ struct Capture: Identifiable, Codable, Equatable {
     let createdAt: Date
     var note: String
     let imageFilename: String
+    /// 사진 보관함에서 가져온 캡처라면 그 에셋의 식별자. 같은 스크린샷을 두 번
+    /// 들여오지 않기 위한 것이다. 이 필드가 생기기 전에 저장한 항목은 nil 이므로,
+    /// 그런 항목은 촬영 시각으로 대조한다(`MissedScreenshots`).
+    var assetLocalIdentifier: String?
 }
 
 final class CaptureStore {
@@ -84,7 +88,12 @@ final class CaptureStore {
     }
 
     @discardableResult
-    func save(imageData: Data, note: String) throws -> Capture {
+    func save(
+        imageData: Data,
+        note: String,
+        createdAt: Date = Date(),
+        assetLocalIdentifier: String? = nil
+    ) throws -> Capture {
         guard UIImage(data: imageData) != nil else {
             throw StoreError.invalidImageData
         }
@@ -93,9 +102,10 @@ final class CaptureStore {
         let filename = "\(id.uuidString).image"
         let capture = Capture(
             id: id,
-            createdAt: Date(),
+            createdAt: createdAt,
             note: note,
-            imageFilename: filename
+            imageFilename: filename,
+            assetLocalIdentifier: assetLocalIdentifier
         )
         let imageURL = imagesDirectory.appendingPathComponent(filename, isDirectory: false)
 
