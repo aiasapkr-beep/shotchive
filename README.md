@@ -2,11 +2,26 @@
 
 스크린샷에 ‘왜 저장했는지’를 함께 남기는 iPhone 네이티브 앱입니다.
 
-<img src="docs/demo/core-demo.gif" width="280" alt="스크린샷을 찍으면 이유를 묻고, 적은 이유와 함께 보관함에 저장된다">
+<video
+  src="https://github.com/aiasapkr-beep/shotchive/raw/main/docs/demo/shotchive-promo.mp4"
+  poster="docs/demo/shotchive-promo-poster.png"
+  controls muted playsinline width="280"
+  alt="쌓이기만 하는 스크린샷 더미에서 한 장이 떠오르고, 이유 한 줄이 붙어 보관된다"></video>
 
 **평소처럼 스크린샷을 찍으면 곧바로 “왜 저장했나요?”가 뜹니다.** 한 줄 적으면 그 이유가
-스크린샷과 함께 보관함에 남고, 나중에 그 이유로 찾습니다. iOS 27 실기기 녹화이며
-누르는 지점에 표시를 덧그렸습니다. 원본은 [`docs/demo/core-demo.mp4`](docs/demo/core-demo.mp4).
+스크린샷과 함께 보관함에 남고, 나중에 그 이유로 찾습니다.
+영상이 재생되지 않으면 [`docs/demo/shotchive-promo.mp4`](docs/demo/shotchive-promo.mp4)를
+직접 열어 보세요. 22초, 소리 있음.
+
+<details>
+<summary><b>실기기 녹화</b> — 캡처부터 보관까지 한 번에</summary>
+
+<img src="docs/demo/core-demo.gif" width="280" alt="스크린샷을 찍으면 이유를 묻고, 적은 이유와 함께 보관함에 저장된다">
+
+iOS 27 실기기 녹화이며 누르는 지점에 표시를 덧그렸습니다.
+원본은 [`docs/demo/core-demo.mp4`](docs/demo/core-demo.mp4).
+
+</details>
 
 <details>
 <summary><b>앱 둘러보기</b> — 온보딩, 월별 보관함, 상세 화면</summary>
