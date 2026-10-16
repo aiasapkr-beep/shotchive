@@ -25,7 +25,10 @@ struct SaveLatestScreenshotIntent: AppIntent {
     static var description = IntentDescription("방금 저장된 스크린샷을 Shotchive에 보관하고 저장한 이유를 묻습니다. 이유를 적지 않아도 캡처는 저장됩니다.")
     static var openAppWhenRun = false
 
-    @Parameter(title: "저장한 이유")
+    // 캡처 직후 입력창은 단축어가 그리는 시스템 UI라 우리가 버튼을 넣을 수 없다.
+    // 대신 optionsProvider 로 자주 쓴 이유를 그 입력창에 제안한다 — 고르면 끝이고,
+    // 새로 칠 수도 있다. 단계가 늘지 않으므로 입력창이 안 뜨는 위험도 늘지 않는다.
+    @Parameter(title: "저장한 이유", optionsProvider: FrequentReasonsProvider())
     var note: String?
 
     static var parameterSummary: some ParameterSummary {
@@ -145,6 +148,15 @@ struct SaveLatestScreenshotIntent: AppIntent {
                 }
             }
         }
+    }
+}
+
+/// 보관함에 이미 있는 메모에서 자주 쓴 것을 세어 제안한다. 따로 저장하는 목록이 없어
+/// 쓰는 대로 따라오고, 관리할 상태가 늘지 않는다(`ReasonSuggestions`).
+struct FrequentReasonsProvider: DynamicOptionsProvider {
+    func results() async throws -> [String] {
+        guard let store = try? CaptureStore(), let captures = try? store.all() else { return [] }
+        return ReasonSuggestions.from(captures)
     }
 }
 

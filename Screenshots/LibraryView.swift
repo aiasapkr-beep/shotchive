@@ -25,8 +25,7 @@ struct LibraryView: View {
     private var visibleCaptures: [Capture] {
         model.captures.filter { capture in
             let matchesFilter = filter == .all || capture.note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            let matchesSearch = searchText.isEmpty || capture.note.localizedCaseInsensitiveContains(searchText)
-            return matchesFilter && matchesSearch
+            return matchesFilter && capture.matches(searchText)
         }
     }
 
@@ -84,7 +83,11 @@ struct LibraryView: View {
                                 .accessibilityLabel("보관함 필터")
                             }
                         } footer: {
-                            Text("\(visibleCaptures.count)개 · 저장한 이유를 기준으로 다시 찾을 수 있어요.")
+                            if model.pendingTextIndex > 0 {
+                                Text("\(visibleCaptures.count)개 · 화면 속 글자를 읽는 중이에요 (\(model.pendingTextIndex)장 남음). 끝나면 적은 메모뿐 아니라 화면에 있던 글자로도 찾을 수 있어요.")
+                            } else {
+                                Text("\(visibleCaptures.count)개 · 적은 이유로도, 화면에 있던 글자로도 찾을 수 있어요.")
+                            }
                         }
 
                         if visibleCaptures.isEmpty {
@@ -100,7 +103,11 @@ struct LibraryView: View {
                                         NavigationLink {
                                             CaptureDetailView(capture: capture)
                                         } label: {
-                                            CaptureRow(capture: capture, imageURL: model.imageURL(for: capture))
+                                            CaptureRow(
+                                                capture: capture,
+                                                imageURL: model.imageURL(for: capture),
+                                                query: searchText
+                                            )
                                         }
                                         .accessibilityIdentifier("library.capture.\(capture.id.uuidString)")
                                     }
@@ -114,7 +121,7 @@ struct LibraryView: View {
                 }
             }
             .navigationTitle("보관함")
-            .searchable(text: $searchText, prompt: "메모 검색")
+            .searchable(text: $searchText, prompt: "메모 · 화면 속 글자 검색")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button { showingHelp = true } label: {
@@ -656,6 +663,7 @@ private enum LibraryFilter: String, CaseIterable, Identifiable {
 private struct CaptureRow: View {
     let capture: Capture
     let imageURL: URL?
+    var query: String = ""
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
@@ -694,8 +702,38 @@ private struct CaptureRow: View {
             Text(capture.createdAt, format: .dateTime.year().month().day().hour().minute())
                 .font(.suitCaption)
                 .foregroundStyle(.secondary)
+            // 메모에는 없는 말로 찾았을 때, 왜 이 항목이 떴는지 알려 준다.
+            if let line = capture.imageTextMatch(for: query) {
+                Label(line, systemImage: "text.viewfinder")
+                    .font(.suitCaption)
+                    .foregroundStyle(Color("AccentColor"))
+                    .lineLimit(2)
+                    .padding(.top, 1)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+extension Capture {
+    /// 적은 메모로도, 화면에서 읽은 글자로도 찾는다.
+    func matches(_ query: String) -> Bool {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return true }
+        if note.localizedCaseInsensitiveContains(trimmed) { return true }
+        return recognizedText?.localizedCaseInsensitiveContains(trimmed) == true
+    }
+
+    /// 메모가 아니라 화면 속 글자에서 걸렸다면, 걸린 줄을 돌려준다.
+    func imageTextMatch(for query: String) -> String? {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty,
+              !note.localizedCaseInsensitiveContains(trimmed),
+              let text = recognizedText
+        else { return nil }
+        return text
+            .components(separatedBy: .newlines)
+            .first { $0.localizedCaseInsensitiveContains(trimmed) }
     }
 }
 
@@ -800,6 +838,7 @@ private struct CaptureComposer: View {
                         .lineLimit(3...7)
                         .focused($noteFocused)
                         .accessibilityIdentifier("composer.note")
+                    ReasonChips(suggestions: model.suggestions, note: $note)
                 } header: {
                     Text("왜 저장하나요?")
                 } footer: {
@@ -1046,6 +1085,7 @@ private struct NoteEditor: View {
                         .lineLimit(3...10)
                         .focused($focused)
                         .accessibilityIdentifier("detail.note")
+                    ReasonChips(suggestions: model.suggestions, note: $note)
                 }
             }
             .navigationTitle("메모 편집")
@@ -1406,6 +1446,7 @@ private struct MissedNoteEditor: View {
                         .lineLimit(3...10)
                         .focused($focused)
                         .accessibilityIdentifier("missed.note")
+                    ReasonChips(suggestions: model.suggestions, note: $note)
                 }
                 Section {
                     Text(item.createdAt, format: .dateTime.year().month().day().hour().minute())
@@ -1441,3 +1482,4 @@ private struct MissedNoteEditor: View {
         }
     }
 }
+

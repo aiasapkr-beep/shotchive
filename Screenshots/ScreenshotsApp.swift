@@ -29,10 +29,14 @@ struct ScreenshotsApp: App {
                 .environmentObject(model)
                 .font(.suitBody)
                 .tint(Color("AccentColor"))
-                .task { await model.prepareIfNeeded() }
+                .task {
+                    await model.prepareIfNeeded()
+                    model.indexPendingTextIfNeeded()
+                }
                 .onChange(of: scenePhase) { _, phase in
                     guard phase == .active else { return }
                     model.reload()
+                    model.indexPendingTextIfNeeded()
                 }
         }
     }
@@ -42,10 +46,13 @@ struct ScreenshotsApp: App {
 final class LibraryModel: ObservableObject {
     @Published private(set) var captures: [Capture] = []
     @Published private(set) var missed: [MissedScreenshots.Item] = []
+    /// 아직 글자를 읽지 않은 캡처 수. 0 이면 색인이 끝난 것이다.
+    @Published private(set) var pendingTextIndex = 0
     @Published var presentedError: String?
 
     private var store: CaptureStore?
     private var hasPrepared = false
+    private var indexingTask: Task<Void, Never>?
 
     init() {
         do {
@@ -72,6 +79,55 @@ final class LibraryModel: ObservableObject {
             presentedError = "저장된 스크린샷을 불러오지 못했어요.\n\(error.localizedDescription)"
         }
         rescanMissed()
+        suggestions = ReasonSuggestions.from(captures)
+        pendingTextIndex = captures.filter { $0.recognizedText == nil }.count
+    }
+
+    /// 자주 쓴 이유. 메모 입력 화면에서 버튼으로 꺼내 쓴다.
+    @Published private(set) var suggestions: [String] = []
+
+    // MARK: - 화면 속 글자 색인
+
+    /// 아직 읽지 않은 캡처의 글자를 한 장씩 읽어 둔다.
+    ///
+    /// 저장할 때가 아니라 나중에 읽는다. 캡처 경로(App Intent)는 단축어 자동화의
+    /// 실행 예산 안에서 돌고 이미 사진 색인을 최대 10초 기다리므로, 거기에 OCR 까지
+    /// 얹으면 캡처를 잃을 위험이 커진다. 저장은 빠르게 끝내고 읽기는 앱이 맡는다.
+    /// 이 필드가 생기기 전에 저장한 항목도 같은 경로로 소급해서 읽힌다.
+    func indexPendingTextIfNeeded() {
+        guard indexingTask == nil else { return }
+        let targets = captures.filter { $0.recognizedText == nil }
+        guard !targets.isEmpty else { return }
+
+        indexingTask = Task { [weak self] in
+            for capture in targets {
+                if Task.isCancelled { break }
+                guard let url = self?.imageURL(for: capture),
+                      let data = try? Data(contentsOf: url)
+                else { continue }
+                // 한 장 읽는 데 수백 ms 가 걸린다. 메인 스레드 밖에서 읽고 결과만 올린다.
+                let text = await Task.detached(priority: .utility) {
+                    ScreenshotText.recognize(imageData: data)
+                }.value
+                guard let text else { continue }
+                self?.storeRecognizedText(text, for: capture)
+            }
+            self?.finishIndexing()
+        }
+    }
+
+    private func storeRecognizedText(_ text: String, for capture: Capture) {
+        guard let store else { return }
+        try? store.updateRecognizedText(capture, text: text)
+        if let index = captures.firstIndex(where: { $0.id == capture.id }) {
+            captures[index].recognizedText = text
+            pendingTextIndex = max(0, pendingTextIndex - 1)
+        }
+    }
+
+    private func finishIndexing() {
+        indexingTask = nil
+        reload()
     }
 
     // MARK: - 자동화가 건너뛴 캡처
