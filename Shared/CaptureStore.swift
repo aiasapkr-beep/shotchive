@@ -10,6 +10,10 @@ struct Capture: Identifiable, Codable, Equatable {
     /// 들여오지 않기 위한 것이다. 이 필드가 생기기 전에 저장한 항목은 nil 이므로,
     /// 그런 항목은 촬영 시각으로 대조한다(`MissedScreenshots`).
     var assetLocalIdentifier: String?
+    /// 스크린샷 안에서 읽어 낸 글자. 적은 메모와 함께 검색에 쓴다.
+    /// `nil` 은 **아직 색인하지 않음**, `""` 는 **색인했는데 글자가 없음** 이다.
+    /// 둘을 섞으면 글자 없는 캡처를 영원히 다시 읽게 된다(`ScreenshotText`).
+    var recognizedText: String?
 }
 
 final class CaptureStore {
@@ -92,7 +96,8 @@ final class CaptureStore {
         imageData: Data,
         note: String,
         createdAt: Date = Date(),
-        assetLocalIdentifier: String? = nil
+        assetLocalIdentifier: String? = nil,
+        recognizedText: String? = nil
     ) throws -> Capture {
         guard UIImage(data: imageData) != nil else {
             throw StoreError.invalidImageData
@@ -105,7 +110,8 @@ final class CaptureStore {
             createdAt: createdAt,
             note: note,
             imageFilename: filename,
-            assetLocalIdentifier: assetLocalIdentifier
+            assetLocalIdentifier: assetLocalIdentifier,
+            recognizedText: recognizedText
         )
         let imageURL = imagesDirectory.appendingPathComponent(filename, isDirectory: false)
 
@@ -117,6 +123,13 @@ final class CaptureStore {
             throw error
         }
         return capture
+    }
+
+    /// 색인 결과만 갈아 끼운다. 메모와 달리 사용자가 쓴 값이 아니므로 덮어써도 된다.
+    func updateRecognizedText(_ capture: Capture, text: String) throws {
+        var updated = capture
+        updated.recognizedText = text
+        try writeMetadata(updated)
     }
 
     func update(_ capture: Capture, note: String) throws {

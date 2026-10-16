@@ -94,6 +94,11 @@ final class ShareViewController: UIViewController {
 
 private final class ShareComposeModel: ObservableObject {
     @Published var note = ""
+    /// 자주 쓴 이유. 공유 확장은 앱과 같은 App Group 저장소를 읽으므로 같은 목록이 나온다.
+    let suggestions: [String] = {
+        guard let store = try? CaptureStore(), let captures = try? store.all() else { return [] }
+        return ReasonSuggestions.from(captures)
+    }()
     @Published var image: UIImage?
     @Published var imageData: Data?
     @Published var isLoading = true
@@ -123,6 +128,7 @@ private struct ShareComposeView: View {
                         .focused($noteIsFocused)
                         .accessibilityLabel("저장한 이유")
                         .accessibilityIdentifier("share.note")
+                    ReasonChips(suggestions: model.suggestions, note: $model.note)
                 } header: {
                     Text("왜 저장했나요?")
                 } footer: {
